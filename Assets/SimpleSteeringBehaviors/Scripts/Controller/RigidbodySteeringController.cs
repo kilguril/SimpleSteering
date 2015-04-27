@@ -27,7 +27,7 @@ namespace SimpleSteering.Controller
 
             for ( int i = 0; i < m_behaviors.Count; i++ )
             {
-                m_steeringVector += m_behaviors[ i ].CalculateSteeringForce();
+                m_steeringVector += m_behaviors[ i ].GetSteeringForce();
             }
 
             float steeringMagnitude = Mathf.Clamp( m_steeringVector.magnitude, 0.0f, m_maxSteeringForce );

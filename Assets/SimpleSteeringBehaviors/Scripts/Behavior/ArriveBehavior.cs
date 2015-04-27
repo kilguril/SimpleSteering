@@ -5,23 +5,18 @@ namespace SimpleSteering.Behavior
 {
     public class ArriveBehavior : SimpleSteeringBehavior
     {
-        public Transform target     { get { return m_target; } set { m_target = value; } }
-        public float     speed      { get { return m_speed; } set { m_speed = Mathf.Clamp01( value ); } }
+        public Transform target     { get { return m_target; } set { m_target = value; } }        
         public float     slowRadius { get { return m_slowRadius; } set { m_slowRadius = value; } }
 
         [SerializeField]
         private Transform   m_target;
-
-        [SerializeField]        
-        [Range(0.0f, 1.0f)]
-        private float       m_speed;
 
         [SerializeField]
         private float       m_slowRadius;
 
         private Vector3     m_steering;
 
-        public override Vector3 CalculateSteeringForce()
+        protected override Vector3 CalculateSteeringForce()
         {
             if ( m_target == null )
             {
@@ -31,7 +26,7 @@ namespace SimpleSteering.Behavior
 
             Vector3 wantedVelocity = m_target.position - m_controller.transform.position;
             float   distance = wantedVelocity.magnitude;
-            wantedVelocity = wantedVelocity.normalized * m_controller.maxVelocity * m_speed;
+            wantedVelocity = wantedVelocity.normalized * m_controller.maxVelocity;
 
             if ( distance < m_slowRadius )
             {
