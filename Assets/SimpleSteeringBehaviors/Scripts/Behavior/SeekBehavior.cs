@@ -12,7 +12,7 @@ namespace SimpleSteering.Behavior
 
         private Vector3     m_steering;
 
-        protected override Vector3 CalculateSteeringForce()
+        protected override Vector3 CalculateSteeringForce( float deltaTime )
         {
             if ( m_target == null )
             {

@@ -17,12 +17,14 @@ namespace SimpleSteering.Behavior
         protected SimpleSteeringController  m_controller;       // Cached reference to owner controller
         
         public abstract void       DrawGizmos();
-        protected abstract Vector3 CalculateSteeringForce();
+        protected abstract Vector3 CalculateSteeringForce( float deltaTime );
 
 
-        public Vector3 GetSteeringForce()
+        // Since Unity provides us with two timing methods ( update and fixedUpdate ), we will pass the relevant dT value as parameter
+        // To abstract the type of timing method used
+        public Vector3 GetSteeringForce( float deltaTime )
         {
-            return CalculateSteeringForce() * m_speed;
+            return CalculateSteeringForce( deltaTime ) * m_speed;
         }
 
 

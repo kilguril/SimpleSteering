@@ -10,17 +10,13 @@ namespace SimpleSteering.Behavior
         [SerializeField]
         private Transform   m_target;
 
-        [SerializeField]
-        private float       m_predictionTime;
-
         private Vector3     m_steering;
         private Vector3     m_perceivedVelocity;        
 
         private Transform   m_cachedTarget;
         private Vector3     m_prevPosition;
-        private float       m_prevTimestep;
 
-        protected override Vector3 CalculateSteeringForce()
+        protected override Vector3 CalculateSteeringForce( float deltaTime )
         {
             if ( m_target == null )
             {
@@ -33,16 +29,15 @@ namespace SimpleSteering.Behavior
             if ( m_cachedTarget == m_target && m_target != null )
             {                
                 Vector3 dx = m_target.position - m_prevPosition;
-                float dt = Time.time - m_prevTimestep;
-
-                m_perceivedVelocity = dx / dt;
+                m_perceivedVelocity = dx / deltaTime;
             }
 
             m_cachedTarget = m_target;
-            m_prevTimestep = Time.time;
             m_prevPosition = m_target.position;
 
-            Vector3 wantedVelocity = ( m_target.position + m_perceivedVelocity * m_predictionTime ) - m_controller.transform.position;
+            float predictionTime = ( m_target.position - m_controller.transform.position ).magnitude / m_controller.maxVelocity;
+
+            Vector3 wantedVelocity = ( m_target.position + m_perceivedVelocity * predictionTime  ) - m_controller.transform.position;
             wantedVelocity = wantedVelocity.normalized * m_controller.maxVelocity;
 
             m_steering = wantedVelocity - m_controller.currentVelocity;
@@ -56,7 +51,9 @@ namespace SimpleSteering.Behavior
 
             if ( m_target != null )
             {
-                Gizmos.DrawWireSphere( m_target.position + m_perceivedVelocity * m_predictionTime, 0.25f );
+                float predictionTime = ( m_target.position - m_controller.transform.position ).magnitude / m_controller.maxVelocity;
+
+                Gizmos.DrawWireSphere( m_target.position + m_perceivedVelocity * predictionTime, 0.25f );
             }
         }
     }

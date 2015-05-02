@@ -24,7 +24,7 @@ namespace SimpleSteering.Behavior
         private Vector3     m_displacement;
         private Vector3     m_steering;
 
-        protected override Vector3 CalculateSteeringForce()
+        protected override Vector3 CalculateSteeringForce( float deltaTime )
         {
             Vector3 targetDisplacement = Vector3.zero;
 
@@ -46,9 +46,7 @@ namespace SimpleSteering.Behavior
             }
             else
             {
-                // Since behavior change is time based this creates a distinction between different controllers update methods
-                // Need to think how to handle this (more gracefully than simply assuming a specific method - e.g. Time.fixedDeltaTime)
-                m_displacement = Vector3.RotateTowards( m_displacement, targetDisplacement, m_wanderChange * Time.fixedDeltaTime, float.MaxValue );
+                m_displacement = Vector3.RotateTowards( m_displacement, targetDisplacement, m_wanderChange * deltaTime, float.MaxValue );
             }
 
             Vector3 wantedVelocity = ( transform.position + m_controller.currentVelocity + m_displacement ) - m_controller.transform.position;

@@ -29,7 +29,7 @@ namespace SimpleSteering.Behavior
 
         private Vector3     m_smoothSteering;
 
-        protected override Vector3 CalculateSteeringForce()
+        protected override Vector3 CalculateSteeringForce( float deltaTime )
         {
             Ray        ray = new Ray( m_controller.transform.position, m_controller.currentVelocity );
             RaycastHit hit;
